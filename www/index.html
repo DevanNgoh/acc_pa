@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your Accountability Partner</title>
+<meta name="theme-color" content="#2b8a7e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Partner">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Nunito:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#eef3f1;--surface:#fff;--ink:#1d2a40;--mute:#5d6b80;--line:#d5dfdc;--accent:#2b8a7e;--accent-ink:#fff;--sun:#e8a21f;--bubble:#dff0ea;
+--c-health:#2b8a7e;--c-work:#5b6ee1;--c-personal:#c9578b;--c-life:#d98a2b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#111a24;--surface:#1a2634;--ink:#e8eef5;--mute:#9bacbf;--line:#2c3a4b;--accent:#4fb8a9;--accent-ink:#0d1a22;--bubble:#1f3a38;--sun:#f0b240;--c-health:#4fb8a9;--c-work:#8f9cf5;--c-personal:#ee86b3;--c-life:#f0a85c}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#111a24;--surface:#1a2634;--ink:#e8eef5;--mute:#9bacbf;--line:#2c3a4b;--accent:#4fb8a9;--accent-ink:#0d1a22;--bubble:#1f3a38;--sun:#f0b240;--c-health:#4fb8a9;--c-work:#8f9cf5;--c-personal:#ee86b3;--c-life:#f0a85c}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.5 Nunito,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:560px;margin:0 auto;padding:20px 18px 64px}
+h2{font:700 22px "Bricolage Grotesque",Nunito,system-ui,sans-serif;letter-spacing:-.01em;margin:0}
+[hidden]{display:none!important}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;color:var(--mute);font-size:15px}
+nav{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:22px}
+nav button{flex:1;font:700 15px Nunito,sans-serif;border:0;background:none;color:var(--mute);border-radius:10px;padding:9px 4px;cursor:pointer}
+nav button[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
+.partner{display:flex;gap:12px;align-items:flex-end;margin-bottom:26px}
+.avatar{flex:none;width:52px;height:52px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font:700 22px "Bricolage Grotesque",sans-serif}
+.bubble{background:var(--bubble);border-radius:22px 22px 22px 6px;padding:16px 18px;font-size:19px;line-height:1.4;font-weight:600}
+.bubble small{display:block;font-weight:400;font-size:15px;color:var(--mute);margin-top:6px}
+.row{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 10px}
+.mute,.today{color:var(--mute);font-size:15px}
+ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+li.g{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+.check{width:38px;height:38px;border-radius:50%;border:2.5px solid var(--cat,var(--accent));background:transparent;color:var(--accent-ink);cursor:pointer;display:grid;place-items:center;padding:0;font-size:20px;transition:background .15s,transform .15s}
+.check:active{transform:scale(.9)}
+.done .check{background:var(--cat)}
+.done .t{color:var(--mute);text-decoration:line-through;text-decoration-thickness:1.5px}
+.t{font-weight:600;overflow-wrap:anywhere}
+.meta{display:flex;gap:10px;align-items:center;margin-top:4px;font-size:14px;color:var(--mute);flex-wrap:wrap}
+.dots{display:flex;gap:4px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--cat)}
+.dots i.miss{background:transparent;border:1.5px solid var(--mute)}
+.dots i.now{outline:2px solid var(--line);outline-offset:1px}
+.streak{font-weight:700;color:var(--ink)}
+.streak b{color:var(--sun)}
+.del{background:none;border:0;color:var(--mute);cursor:pointer;font-size:22px;line-height:1;padding:6px;border-radius:8px}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.card,form{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:22px;display:grid;gap:10px}
+label{font-weight:700;font-size:15px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 12px;width:100%}
+textarea{min-height:76px;resize:vertical}
+.cats{display:flex;gap:8px;flex-wrap:wrap}
+.cats button{font:600 15px Nunito,sans-serif;border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:7px 14px;cursor:pointer}
+.cats button[aria-pressed="true"]{border-color:var(--cat,var(--accent));background:var(--cat,var(--accent));color:var(--accent-ink)}
+.cats.days button{width:40px;height:40px;padding:0}
+.cats.mood button{font-size:24px;padding:6px 14px}
+.primary{font:700 17px Nunito,sans-serif;background:var(--accent);color:var(--accent-ink);border:0;border-radius:12px;padding:13px;cursor:pointer}
+.primary:disabled{opacity:.6}
+.ghost{font:700 15px Nunito,sans-serif;background:none;color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer}
+.ghost[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:16px;padding:20px;color:var(--mute);text-align:center}
+.link{background:none;border:0;color:var(--mute);font:inherit;text-decoration:underline;cursor:pointer;padding:0}
+.jcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:8px}
+.jhead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.big{font:700 40px/1.1 "Bricolage Grotesque",sans-serif;color:var(--accent)}
+.why{font-style:italic;color:var(--mute)}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.toast{background:var(--bubble);border-radius:14px;padding:12px 14px;font-weight:600;margin-bottom:12px}
+input[type=range]{padding:0;accent-color:var(--accent)}
+.log{display:grid;gap:8px;min-height:120px}
+.m{max-width:85%;padding:10px 14px;border-radius:18px;white-space:pre-wrap;overflow-wrap:anywhere}
+.m.u{justify-self:end;background:var(--accent);color:var(--accent-ink);border-bottom-right-radius:6px}
+.m.p{justify-self:start;background:var(--bubble);border-bottom-left-radius:6px}
+#cform{grid-template-columns:1fr auto;align-items:center;position:sticky;bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+.mrow{display:flex;justify-content:space-between;text-align:center;font-size:13px;color:var(--mute)}
+.mrow span{display:grid;gap:2px;font-size:22px}
+.mrow small{font-size:12px}
+details{margin-top:28px;color:var(--mute);font-size:15px}
+summary{cursor:pointer;font-weight:700}
+details p{margin:8px 0 0}
+.tl{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.tut{position:fixed;inset:0;z-index:50;background:rgba(10,20,30,.6);display:grid;place-items:center;padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px))}
+.tcard{background:var(--surface);border-radius:24px;padding:26px 22px;max-width:380px;width:100%;text-align:center;display:grid;gap:12px}
+.tcard p{margin:0;color:var(--mute)}
+.temoji{font-size:52px;line-height:1}
+.tdots{display:flex;gap:6px;justify-content:center}
+.tdots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.tdots i.on{background:var(--accent)}
+.tcard .btns{justify-content:center}
+.rrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.rrow input[type=time]{width:auto}
+.rl{display:flex;gap:10px;align-items:center}
+.rl input{width:22px;height:22px;padding:0;accent-color:var(--accent)}
+#rnote{font-size:15px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top"><span id="date"></span><span class="tl"><button class="link" id="install" hidden>Install app</button><button class="link" id="remind">Set reminder</button><button class="link" id="replay">Tutorial</button><button class="link" id="rename">Rename partner</button></span></div>
+  <div class="toast" id="rbanner" role="status" hidden><span id="rbtext"></span><div class="btns" style="margin-top:8px"><button class="ghost" id="rbgo" type="button">Open</button><button class="ghost" id="rbx" type="button">Dismiss</button></div></div>
+  <nav id="nav">
+    <button data-tab="today">Today</button><button data-tab="journeys">Journeys</button><button data-tab="chat">Chat</button><button data-tab="week">Week</button>
+  </nav>
+
+  <section id="p-today">
+    <div class="partner" aria-live="polite"><div class="avatar" id="avatar">P</div><div class="bubble"><span id="msg"></span><small id="sub"></small></div></div>
+    <div class="row"><h2>Today</h2><span class="today" id="count"></span></div>
+    <ul id="list"></ul>
+    <div class="card" id="refl"></div>
+    <form id="gform">
+      <label for="goal">Add a goal</label>
+      <input id="goal" maxlength="80" placeholder="Walk for 20 minutes" autocomplete="off" required>
+      <div class="cats" id="cats" role="group" aria-label="Category"></div>
+      <label>Repeat on <span class="mute">(leave empty for every day)</span></label>
+      <div class="cats days" id="days" role="group" aria-label="Days of the week"></div>
+      <button class="primary" type="submit">Add goal</button>
+    </form>
+  </section>
+
+  <section id="p-journeys" hidden>
+    <div class="row"><h2>Long-term journeys</h2></div>
+    <p class="mute" style="margin:0 0 14px">For the big ones: leaving a habit or addiction behind, or building toward something that takes months.</p>
+    <div class="toast" id="toast" role="status" hidden></div>
+    <ul id="jlist"></ul>
+    <form id="jform">
+      <label for="jkind">New journey</label>
+      <select id="jkind"><option value="quit">I want to stop or stay free of something</option><option value="build">I want to build toward something big</option></select>
+      <input id="jtext" maxlength="80" placeholder="Smoking" aria-label="What is it?" autocomplete="off" required>
+      <input id="jwhy" maxlength="140" placeholder="Why does this matter to you? (optional)" autocomplete="off">
+      <label for="jdate" id="jdl">Started on</label>
+      <input id="jdate" type="date">
+      <button class="primary" type="submit">Start journey</button>
+    </form>
+  </section>
+
+  <section id="p-chat" hidden>
+    <div class="row"><h2>Talk it through</h2></div>
+    <div class="log" id="chatlog" aria-live="polite"></div>
+    <p class="mute" id="cnote"></p>
+    <form id="cform"><input id="cin" maxlength="500" placeholder="Tell me how it’s going" autocomplete="off" aria-label="Message"><button class="primary" type="submit">Send</button></form>
+  </section>
+
+  <section id="p-week" hidden>
+    <div id="wk"></div>
+    <div class="card"><button class="primary" id="review" type="button">Get my weekly review</button><div id="revout" aria-live="polite"></div></div>
+  </section>
+
+  <details>
+    <summary>Need support right now?</summary>
+    <p>If you’re in crisis or thinking about harming yourself, call or text 988 (US) or contact local emergency services. For help with alcohol or drug use, SAMHSA’s free 24/7 helpline is 1-800-662-4357 (US). Outside the US, a local helpline or your doctor can point you to support.</p>
+    <p>This app is a companion, not treatment. Stopping alcohol or certain medications suddenly can be medically risky, so please talk to a doctor first.</p>
+  </details>
+</main>
+<div class="tut" id="tut" hidden role="dialog" aria-modal="true" aria-labelledby="tt">
+  <div class="tcard"><div class="temoji" id="te"></div><h2 id="tt"></h2><p id="tb"></p><div class="tdots" id="td"></div>
+  <div class="btns"><button class="ghost" id="tback" type="button">Back</button><button class="primary" id="tnext" type="button" style="padding:10px 22px">Next</button></div>
+  <button class="link" id="tskip" type="button">Skip</button></div>
+</div>
+<div class="tut" id="rem" hidden role="dialog" aria-modal="true" aria-labelledby="rt">
+  <div class="tcard" style="text-align:left"><h2 id="rt">Reminders</h2><p id="rnote"></p>
+  <div class="rrow"><label class="rl"><input type="checkbox" id="ra"><span>Daily check-in</span></label><input type="time" id="rat" aria-label="Daily check-in time"></div>
+  <div class="rrow"><label class="rl"><input type="checkbox" id="rb"><span>End-of-day reflection</span></label><input type="time" id="rbt" aria-label="End-of-day reflection time"></div>
+  <div class="btns" style="justify-content:flex-start"><button class="primary" id="rsave" type="button" style="padding:10px 22px">Save</button><button class="ghost" id="rtest" type="button">Send a test</button></div>
+  <button class="link" id="rclose" type="button" style="justify-self:start">Cancel</button></div>
+</div>
+<script>
+(function(){
+var KEY="ap-state-v1";
+var CATS={health:"Health",work:"Work",personal:"Personal",life:"Life"};
+var MOODS=["😞","😐","🙂","😄"],MLAB=["rough","meh","good","great"],DL=["S","M","T","W","T","F","S"];
+var DN=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+var MILES=[1,3,7,14,30,60,90,180,365,730,1095];
+var state={name:"Sunny",goals:[],journeys:[],refl:{},chat:[]},cat="health",daySel=[],tab="today",busy=false;
+try{var sv=localStorage.getItem(KEY);if(sv){var p=JSON.parse(sv);if(p&&typeof p==="object")for(var k in p)state[k]=p[k]}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+function key(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function pd(k){var a=k.split("-");return new Date(+a[0],+a[1]-1,+a[2])}
+function diff(a,b){return Math.round((pd(a)-pd(b))/864e5)}
+function daysAgo(n){var d=new Date();d.setDate(d.getDate()-n);return d}
+function $(id){return document.getElementById(id)}
+function el(t,c,txt){var e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e}
+function today(){return key(new Date())}
+function sched(g,d){return !g.days||!g.days.length||g.days.indexOf(d.getDay())>-1}
+function streak(g){var n=0;for(var i=0;i<400;i++){var d=daysAgo(i);if(!sched(g,d))continue;if(g.log[key(d)])n++;else if(i>0)break}return n}
+
+/* ---------- Claude (sample) ---------- */
+var API_URL="https://YOUR-BACKEND.vercel.app/api/chat"; /* set after deploying /backend */
+function ask(prompt,onText){
+  if(!state.aiOk){if(!confirm("To reply, your message and a summary of your goals are sent securely to an AI service (Claude, by Anthropic). They aren’t sold or used for ads. Is that OK?"))return Promise.reject({code:"not_granted"});state.aiOk=true;save()}
+  if(API_URL.indexOf("YOUR-BACKEND")>-1)return Promise.reject({code:"unavailable"});
+  return fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:prompt})})
+  .then(function(r){if(r.status===429)throw{code:"rate_limited"};if(!r.ok)throw{code:"error"};return r.json()})
+  .then(function(d){if(!d.text)throw{code:"error"};if(onText)onText({text:d.text});return{text:d.text}},function(e){throw e&&e.code?e:{code:"unavailable"}})}
+function errMsg(e){var c=e&&e.code;
+  if(c==="not_granted")return"No problem. I can only reply if you allow it, but your check-ins work either way.";
+  if(c==="unavailable")return"I need an internet connection to chat. Your check-ins still work offline.";
+  if(c==="rate_limited")return"Give me a moment, then try again.";
+  return"I couldn’t reply just now. Try again in a bit."}
+function rules(){return"You are "+state.name+", a warm, encouraging accountability partner inside a habit app. Be supportive and friendly, with gentle nudges rather than pressure. Never shame or lecture. Reply in 2 to 4 short sentences, plain text, no markdown, unless asked for more. Celebrate effort, not only results. For long-term journeys such as recovering from an addiction, treat a slip as part of the process: never judge, remind them progress isn’t erased, and encourage reaching out to a trusted person, a counselor or a doctor. Don’t give medical, detox or dosing advice; for alcohol or medication withdrawal, tell them to talk to a doctor. If they mention suicide, self-harm or being in danger, respond with care and urge them to call or text 988 in the US, or local emergency services, right away."}
+function ctx(){var t=today(),now=new Date();
+  var g=state.goals.map(function(g){return"- "+g.text+": "+(sched(g,now)?(g.log[t]?"done today":"not done yet today"):"not scheduled today")+", streak "+streak(g)}).join("\n")||"- no goals yet";
+  var j=state.journeys.map(function(j){return"- "+(j.kind==="quit"?"Staying free of "+j.text+", day "+(diff(t,j.start)+1)+", restarts "+(j.restarts||0):"Building toward "+j.text+", "+(j.progress||0)+"% progress")+(j.why?", their reason: "+j.why:"")}).join("\n")||"- none";
+  var r=state.refl[t];
+  return"Daily goals:\n"+g+"\nLong-term journeys:\n"+j+(r&&r.mood!=null?"\nToday’s mood: "+MLAB[r.mood]+(r.text?". They wrote: "+r.text:""):"")+"\nLocal time: "+now.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}
+
+/* ---------- Tabs ---------- */
+function showTab(t){tab=t;["today","journeys","chat","week"].forEach(function(n){$("p-"+n).hidden=n!==t});
+  [].forEach.call($("nav").children,function(b){if(b.dataset.tab===t)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
+  if(t==="week")renderWeek();if(t==="chat")renderChat();if(t==="journeys")renderJourneys()}
+$("nav").onclick=function(e){var t=e.target.dataset&&e.target.dataset.tab;if(t)showTab(t)};
+
+/* ---------- Today ---------- */
+function message(){
+  var now=new Date(),t=today(),h=now.getHours(),gs=state.goals.filter(function(g){return sched(g,now)});
+  var done=gs.filter(function(g){return g.log[t]}).length,total=gs.length,day=now.getDate();
+  function pick(a){return a[day%a.length]}
+  var n=state.name;
+  if(!state.goals.length&&!state.journeys.length)return["Hi, I’m "+n+". Let’s pick one small thing to start with.","Add a goal below. Small is great."];
+  if(!total)return["Nothing planned for today. Rest counts too.","Want to talk about a bigger goal? Try the Journeys tab."];
+  var best=Math.max.apply(null,gs.map(streak));
+  if(done===total)return[pick(["All done today. I’m proud of you.","You did everything you set out to do. Enjoy the rest of your day.","That’s a full sweep. Rest well."]),best>1?best+" days in a row on your best streak.":"Every check-in counts."];
+  if(done>0)return[pick(["Nice, "+done+" down. You’re on a roll.","Good start. "+(total-done)+" to go, and you’ve got this.","You’re moving. I’m cheering for you."]),"No pressure. Do what you can."];
+  var tod=h<12?"Good morning":h<17?"Hey, good afternoon":"Good evening";
+  return[tod+". Ready when you are.",h<12?"What’s one thing you could knock out first?":h<17?"A tiny step still counts. Want to try one?":"There’s still time for something small tonight."]}
+
+function renderToday(){
+  var now=new Date(),t=today(),list=$("list");list.textContent="";
+  $("avatar").textContent=(state.name||"P").charAt(0).toUpperCase();
+  var m=message();$("msg").textContent=m[0];$("sub").textContent=m[1];
+  var gs=state.goals.filter(function(g){return sched(g,now)});
+  var done=gs.filter(function(g){return g.log[t]}).length;
+  $("count").textContent=gs.length?done+" of "+gs.length+" done":"";
+  if(!state.goals.length)list.appendChild(el("li","empty","Nothing here yet. Add your first goal below."));
+  else if(!gs.length)list.appendChild(el("li","empty","Nothing scheduled today."));
+  gs.forEach(function(g){
+    var li=el("li","g"+(g.log[t]?" done":""));li.style.setProperty("--cat","var(--c-"+g.cat+")");
+    var b=el("button","check",g.log[t]?"✓":"");b.setAttribute("aria-label",(g.log[t]?"Undo ":"Mark done: ")+g.text);b.setAttribute("aria-pressed",!!g.log[t]);
+    b.onclick=function(){if(g.log[t])delete g.log[t];else g.log[t]=1;save();renderToday()};
+    var mid=el("div"),meta=el("div","meta"),dots=el("div","dots");
+    for(var i=6;i>=0;i--){var d=daysAgo(i),k=key(d);dots.appendChild(el("i",g.log[k]?"on":(sched(g,d)&&i>0?"miss":"")+(i===0?" now":"")))}
+    var st=streak(g),s=el("span","streak");
+    if(st>0){s.appendChild(el("b",null,"●"));s.appendChild(document.createTextNode(" "+st+(st===1?" day":" days")))}else s.textContent="Start today";
+    meta.appendChild(dots);meta.appendChild(s);
+    if(g.days&&g.days.length)meta.appendChild(el("span",null,g.days.map(function(d){return DN[d].slice(0,3)}).join(", ")));
+    mid.appendChild(el("div","t",g.text));mid.appendChild(meta);
+    var x=el("button","del","×");x.setAttribute("aria-label","Remove "+g.text);
+    x.onclick=function(){if(confirm("Remove “"+g.text+"”?")){state.goals=state.goals.filter(function(o){return o!==g});save();renderToday()}};
+    li.appendChild(b);li.appendChild(mid);li.appendChild(x);list.appendChild(li)})}
+
+var canned=["That sounds tough. Thank you for showing up anyway.","Steady days count too. Rest up.","Glad it went well. Keep it going.","Love that. Carry this feeling into tomorrow."];
+function renderRefl(){
+  var t=today(),r=state.refl[t]||{},mood=r.mood,box=$("refl");box.textContent="";
+  box.style.marginTop="22px";
+  box.appendChild(el("h2",null,"End-of-day reflection"));
+  var mw=el("div","cats mood");mw.setAttribute("role","group");mw.setAttribute("aria-label","How was today?");
+  MOODS.forEach(function(e,i){var b=el("button",null,e);b.type="button";b.setAttribute("aria-label",MLAB[i]);b.setAttribute("aria-pressed",mood===i);
+    b.onclick=function(){mood=i;[].forEach.call(mw.children,function(c,j){c.setAttribute("aria-pressed",j===i)})};mw.appendChild(b)});
+  var ta=el("textarea");ta.placeholder="What went well? What’s one thing for tomorrow?";ta.value=r.text||"";ta.maxLength=500;ta.setAttribute("aria-label","Reflection");
+  var sb=el("button","primary",r.mood!=null?"Update reflection":"Save reflection");sb.type="button";
+  sb.onclick=function(){if(mood==null){sb.textContent="Pick a mood first";return}
+    state.refl[t]={mood:mood,text:ta.value.trim()};save();sb.disabled=true;sb.textContent="Saving…";
+    var rp=el("p","mute","Thinking…");box.appendChild(rp);
+    ask(rules()+"\n\nWhat you know about them today:\n"+ctx()+"\n\nThey just wrote their end-of-day reflection. Reply in 2 to 3 sentences: acknowledge how they feel and suggest one small step for tomorrow.\n"+state.name+":").then(function(o){state.refl[t].reply=o.text},function(){state.refl[t].reply=canned[mood]}).then(function(){save();renderRefl();renderToday()})};
+  box.appendChild(mw);box.appendChild(ta);box.appendChild(sb);
+  if(r.reply){var rp=el("div","bubble",r.reply);box.appendChild(rp)}}
+
+/* ---------- Journeys ---------- */
+function toast(t){var e=$("toast");e.textContent=t;e.hidden=false}
+function renderJourneys(){
+  var t=today(),list=$("jlist");list.textContent="";
+  if(!state.journeys.length)list.appendChild(el("li","empty","No journeys yet. Start one below whenever you’re ready."));
+  state.journeys.forEach(function(j){
+    var li=el("li","jcard"),head=el("div","jhead"),q=j.kind==="quit",days=diff(t,j.start)+1;
+    var ti=el("div");ti.appendChild(el("div","mute",q?"Staying free of":"Building toward"));ti.appendChild(el("div","t",j.text));
+    var x=el("button","del","×");x.setAttribute("aria-label","Remove "+j.text);
+    x.onclick=function(){if(confirm("Remove “"+j.text+"” and its history?")){state.journeys=state.journeys.filter(function(o){return o!==j});save();renderJourneys()}};
+    head.appendChild(ti);head.appendChild(x);li.appendChild(head);
+    if(q){
+      li.appendChild(el("div","big","Day "+days));
+      var nx=MILES.filter(function(m){return m>days})[0],best=Math.max(j.best||0,days);
+      li.appendChild(el("div","mute","Longest run: "+best+(best===1?" day":" days")+(j.restarts?"  |  Fresh starts: "+j.restarts:"")+(nx?"  |  Next milestone: "+nx+" days":"")));
+    }else{
+      var pr=j.progress||0;
+      li.appendChild(el("div","big",pr+"%"));
+      var rg=el("input");rg.type="range";rg.min=0;rg.max=100;rg.value=pr;rg.setAttribute("aria-label","Progress");
+      rg.oninput=function(){li.querySelector(".big").textContent=rg.value+"%"};
+      rg.onchange=function(){j.progress=+rg.value;save()};li.appendChild(rg);
+      if(j.target){var left=diff(j.target,t);li.appendChild(el("div","mute",left>0?left+" days to go":left===0?"Target date is today":"Target date passed. You can keep going."))}
+    }
+    if(j.why)li.appendChild(el("div","why","“"+j.why+"”"));
+    var bt=el("div","btns"),ck=el("button","ghost",j.checks&&j.checks[t]?"✓ Checked in today":q?"Today went okay":"I worked on it today");
+    ck.setAttribute("aria-pressed",!!(j.checks&&j.checks[t]));
+    ck.onclick=function(){j.checks=j.checks||{};if(j.checks[t])delete j.checks[t];else j.checks[t]=1;save();renderJourneys()};bt.appendChild(ck);
+    if(q){var sl=el("button","ghost","I slipped");sl.onclick=function(){
+      if(!confirm("Thank you for being honest. A slip doesn’t erase your progress. Start a fresh count from today?"))return;
+      var run=diff(t,j.start);j.best=Math.max(j.best||0,run);j.restarts=(j.restarts||0)+1;j.start=t;save();
+      toast("Slips happen, and you’re still here. Your longest run so far is "+j.best+(j.best===1?" day":" days")+". Tomorrow is a fresh start. Want to talk it through? Open the Chat tab.");renderJourneys()};bt.appendChild(sl)}
+    li.appendChild(bt);list.appendChild(li)})}
+function setKind(){var q=$("jkind").value==="quit",d=$("jdate");
+  $("jdl").textContent=q?"Started on":"Target date (optional)";$("jtext").placeholder=q?"Smoking":"Run a marathon";
+  if(q){d.max=today();d.removeAttribute("min");d.value=today()}else{d.removeAttribute("max");d.min=today();d.value=""}}
+$("jkind").onchange=setKind;
+$("jform").onsubmit=function(e){e.preventDefault();var v=$("jtext").value.trim();if(!v)return;var q=$("jkind").value==="quit",dv=$("jdate").value;
+  state.journeys.push({id:Date.now(),text:v,kind:q?"quit":"build",why:$("jwhy").value.trim(),start:q?(dv||today()):today(),target:q?null:(dv||null),progress:0,best:0,restarts:0,checks:{}});
+  $("jtext").value="";$("jwhy").value="";save();setKind();renderJourneys()};
+
+/* ---------- Chat ---------- */
+function renderChat(){var log=$("chatlog");log.textContent="";
+  if(!state.chat.length){log.appendChild(el("div","m p","Hi, it’s "+state.name+". How’s today going?"));
+    var w=el("div","btns");["I’m struggling today","Help me plan tomorrow","I have a win to share"].forEach(function(s){var b=el("button","ghost",s);b.onclick=function(){send(s)};w.appendChild(b)});log.appendChild(w)}
+  state.chat.forEach(function(m){log.appendChild(el("div","m "+m.r,m.t||"…"))});
+  window.scrollTo(0,document.body.scrollHeight)}
+function send(text){text=(text||"").trim();if(!text||busy)return;busy=true;
+  var hist=state.chat.slice(-10).map(function(x){return(x.r==="u"?"Them: ":state.name+": ")+x.t}).join("\n");
+  state.chat.push({r:"u",t:text});var m={r:"p",t:""};state.chat.push(m);renderChat();
+  var prompt=rules()+"\n\nWhat you know about them today:\n"+ctx()+"\n\nRecent conversation:\n"+(hist||"(just started)")+"\n\nThem: "+text+"\n"+state.name+":";
+  ask(prompt,function(o){m.t=o.text;renderChat()}).then(function(r){m.t=r.text},function(e){m.t=errMsg(e)}).then(function(){busy=false;state.chat=state.chat.slice(-40);save();renderChat()})}
+$("cform").onsubmit=function(e){e.preventDefault();var v=$("cin").value;$("cin").value="";send(v)};
+
+/* ---------- Week ---------- */
+function weekData(){var res=[],ds=0,dt=0;
+  state.goals.forEach(function(g){var cells=[],s=0,d=0;
+    for(var i=6;i>=0;i--){var dd=daysAgo(i),sc=sched(g,dd),dn=!!g.log[key(dd)];cells.push(dn?"on":sc?"miss":"off");if(sc){s++;if(dn)d++}}
+    res.push({g:g,cells:cells,s:s,d:d});ds+=d;dt+=s});
+  return{rows:res,done:ds,total:dt}}
+function weekText(w){return"Last 7 days: "+w.done+" of "+w.total+" planned check-ins done.\n"+w.rows.map(function(r){return"- "+r.g.text+": "+r.d+"/"+r.s}).join("\n")+"\nMoods: "+[6,5,4,3,2,1,0].map(function(i){var r=state.refl[key(daysAgo(i))];return r&&r.mood!=null?MLAB[r.mood]:"none"}).join(", ")+"\n"+ctx()}
+function renderWeek(){var box=$("wk");box.textContent="";var w=weekData();
+  box.appendChild(el("h2",null,"Your week"));
+  if(!w.total){box.appendChild(el("p","mute","Add a few goals and check in. Your week will show up here."))}
+  else{var pct=Math.round(100*w.done/w.total);
+    box.appendChild(el("p",null,"You checked in on "+w.done+" of "+w.total+" planned goals this week."));
+    var bar=el("div","bar"),fill=el("i");fill.style.width=pct+"%";bar.appendChild(fill);box.appendChild(bar);
+    var ul=el("ul");ul.style.marginTop="16px";
+    w.rows.forEach(function(r){var li=el("li","g");li.style.gridTemplateColumns="1fr auto";li.style.setProperty("--cat","var(--c-"+r.g.cat+")");
+      li.appendChild(el("div","t",r.g.text));var dots=el("div","dots");r.cells.forEach(function(c){var i=el("i",c==="off"?"":c);if(c==="off")i.style.opacity=".4";dots.appendChild(i)});li.appendChild(dots);ul.appendChild(li)});
+    box.appendChild(ul)}
+  var mr=el("div","card mrow");mr.setAttribute("aria-label","Mood this week");
+  for(var i=6;i>=0;i--){var d=daysAgo(i),r=state.refl[key(d)],s=el("span",null,r&&r.mood!=null?MOODS[r.mood]:"·");s.appendChild(el("small",null,DN[d.getDay()].slice(0,3)));mr.appendChild(s)}
+  box.appendChild(mr);
+  state.journeys.filter(function(j){return j.kind==="quit"}).forEach(function(j){box.appendChild(el("p","mute","Staying free of "+j.text+": day "+(diff(today(),j.start)+1)))})}
+$("review").onclick=function(){var b=$("review"),out=$("revout"),w=weekData();b.disabled=true;out.textContent="Looking over your week…";
+  ask(rules()+"\n\nWrite a weekly review for them in 4 to 6 sentences: name one thing to celebrate, one gentle observation, and one small focus for next week. Their data:\n"+weekText(w)+"\n"+state.name+":",function(o){out.textContent=o.text})
+  .then(function(r){out.textContent=r.text},function(e){out.textContent=w.total?"You checked in on "+w.done+" of "+w.total+" planned goals. That’s real effort. Pick one goal to protect next week, and keep it small. ("+errMsg(e)+")":errMsg(e)}).then(function(){b.disabled=false})};
+
+/* ---------- Forms & setup ---------- */
+var cw=$("cats");
+Object.keys(CATS).forEach(function(k){var b=el("button",null,CATS[k]);b.type="button";b.style.setProperty("--cat","var(--c-"+k+")");b.setAttribute("aria-pressed",k===cat);
+  b.onclick=function(){cat=k;[].forEach.call(cw.children,function(c){c.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true")};cw.appendChild(b)});
+var dw=$("days");
+DL.forEach(function(l,i){var b=el("button",null,l);b.type="button";b.setAttribute("aria-label",DN[i]);b.setAttribute("aria-pressed","false");
+  b.onclick=function(){var x=daySel.indexOf(i);if(x>-1)daySel.splice(x,1);else daySel.push(i);b.setAttribute("aria-pressed",x===-1)};dw.appendChild(b)});
+$("gform").onsubmit=function(e){e.preventDefault();var v=$("goal").value.trim();if(!v)return;
+  state.goals.push({id:Date.now(),text:v,cat:cat,days:daySel.length?daySel.slice().sort():null,log:{}});
+  $("goal").value="";daySel=[];[].forEach.call(dw.children,function(c){c.setAttribute("aria-pressed","false")});save();renderToday()};
+$("rename").onclick=function(){var n=prompt("What should your partner be called?",state.name);if(n&&n.trim()){state.name=n.trim().slice(0,20);save();renderToday();renderChat()}};
+$("date").textContent=new Date().toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"});
+/* ---------- Tutorial ---------- */
+var TUT=[
+["👋","Meet {n}","I’m your accountability partner. I’ll cheer you on, nudge you gently, and never shame you."],
+["✅","Add your goals","Add daily goals, or pick the days each one repeats. Tap the circle to check it off and build a streak."],
+["🌙","Reflect each evening","Pick a mood and write a line about your day. I’ll reply with one small step for tomorrow."],
+["🌱","Journeys for big goals","Use Journeys to leave a habit behind or build toward something big. If you slip, you can restart without losing your longest run."],
+["💬","Talk anytime","Open Chat when you need a boost, and check the Week tab for a review. Your goals stay on your phone, and chat messages go to an AI service only after you say OK."]];
+var ti=0;
+function tutDraw(){var s=TUT[ti],d=$("td");$("te").textContent=s[0];$("tt").textContent=s[1].replace("{n}",state.name);$("tb").textContent=s[2];d.textContent="";
+  TUT.forEach(function(x,i){d.appendChild(el("i",i===ti?"on":""))});$("tback").hidden=ti===0;$("tnext").textContent=ti===TUT.length-1?"Get started":"Next"}
+function openTut(){ti=0;$("tut").hidden=false;tutDraw();$("tnext").focus()}
+function closeTut(){$("tut").hidden=true;state.seen=true;save();showTab("today")}
+$("tnext").onclick=function(){if(ti<TUT.length-1){ti++;tutDraw()}else closeTut()};
+$("tback").onclick=function(){if(ti>0){ti--;tutDraw()}};
+$("tskip").onclick=closeTut;$("replay").onclick=openTut;
+
+/* ---------- Reminders ---------- */
+var RK=["a","b"],RID={a:1,b:2};
+var RTXT={a:"Hey, checking in. How’s today going?",b:"Time to wind down. Check off your goals and tell me how today went."};
+function normT(t){var m=/^(\d{1,2}):(\d{2})$/.exec(String(t||"").trim());if(!m||+m[1]>23||+m[2]>59)return null;return String(+m[1]).padStart(2,"0")+":"+m[2]}
+(function(){var r=state.rem;
+  if(!r||typeof r!=="object"){var old=normT(state.remind);r=state.rem={a:{on:!!old,time:old||"09:00",last:""},b:{on:false,time:"21:00",last:""}}}
+  RK.forEach(function(k){r[k]=r[k]||{};if(!normT(r[k].time))r[k].time=k==="a"?"09:00":"21:00";r[k].on=!!r[k].on;r[k].last=r[k].last||""});
+  delete state.remind;save()})();
+function LN(){return window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.LocalNotifications}
+function remLabel(){var n=RK.filter(function(k){return state.rem[k].on}).length;$("remind").textContent=n?"Reminders ("+n+")":"Set reminders"}
+function webOK(){return"Notification" in window}
+function webNotify(body){
+  if(!webOK()||Notification.permission!=="granted")return false;
+  var o={body:body,icon:"icons/icon-192.png",badge:"icons/icon-192.png"};
+  try{
+    if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)&&navigator.serviceWorker.controller){
+      navigator.serviceWorker.getRegistration().then(function(reg){try{if(reg)reg.showNotification(state.name,o);else new Notification(state.name,o)}catch(e){}})}
+    else new Notification(state.name,o)
+  }catch(e){return false}
+  return true}
+function banner(k){$("rbtext").textContent=k==="b"?"Evening check: how did today go? Take a minute to reflect.":"Checking in. How’s today going?";$("rbanner").dataset.k=k;$("rbanner").hidden=false}
+$("rbx").onclick=function(){$("rbanner").hidden=true};
+$("rbgo").onclick=function(){var k=$("rbanner").dataset.k;$("rbanner").hidden=true;showTab("today");if(k==="b")$("refl").scrollIntoView({behavior:"smooth"})};
+/* Browser/PWA fallback: fires while the app is open. The installed phone app uses native scheduled notifications instead. */
+function tick(){if(isNative)return;var now=new Date(),t=today();
+  RK.forEach(function(k){var r=state.rem[k];if(!r.on||r.last===t)return;
+    var p=r.time.split(":"),due=new Date();due.setHours(+p[0],+p[1],0,0);var late=now-due;if(late<0)return;
+    r.last=t;save();
+    if(k==="b"&&state.refl[t]&&state.refl[t].mood!=null)return;
+    if(late<=15*60000&&webNotify(RTXT[k]))return;
+    banner(k)})}
+function openRem(){
+  RK.forEach(function(k){$("r"+k).checked=state.rem[k].on;$("r"+k+"t").value=state.rem[k].time});
+  $("rnote").textContent=LN()?"Reminders arrive even when the app is closed."
+    :(isIOS&&!standalone)?"On iPhone, tap Install app first and add this to your Home Screen. Then set reminders from the installed app."
+    :!webOK()?"This browser can’t show notifications, so I’ll show a reminder here when you open the app."
+    :"I’ll send a notification while the app is open or recently used. If you miss one, you’ll see it here next time you open the app.";
+  $("rem").hidden=false;$("ra").focus()}
+function closeRem(){$("rem").hidden=true}
+$("remind").onclick=openRem;$("rclose").onclick=closeRem;
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!$("rem").hidden)closeRem()});
+$("rsave").onclick=function(){var now=new Date(),t=today(),any=false,list=[],times=[];
+  RK.forEach(function(k){var r=state.rem[k],on=$("r"+k).checked,tm=normT($("r"+k+"t").value)||r.time;
+    if(r.on!==on||r.time!==tm){var p=tm.split(":"),due=new Date();due.setHours(+p[0],+p[1],0,0);r.last=now>=due?t:""}
+    r.on=on;r.time=tm;
+    if(on){any=true;times.push(tm);var q=tm.split(":");list.push({id:RID[k],title:state.name,body:RTXT[k],schedule:{on:{hour:+q[0],minute:+q[1]},allowWhileIdle:true}})}});
+  save();remLabel();
+  var ln=LN();
+  if(ln){
+    var pr=any?ln.requestPermissions().then(function(r){if(r.display!=="granted")throw{code:"denied"}}):Promise.resolve();
+    pr.then(function(){return ln.cancel({notifications:[{id:1},{id:2}]})})
+      .then(function(){return list.length?ln.schedule({notifications:list}):null})
+      .then(function(){closeRem();alert(any?"Saved. I’ll check in at "+times.join(" and ")+" every day.":"Reminders are off.")},
+        function(e){alert(e&&e.code==="denied"?"Notifications are off. You can turn them on in your phone’s Settings.":"I couldn’t set the reminders. Please try again.")});
+    return}
+  function done(){closeRem();if(any&&webOK()&&Notification.permission==="denied")alert("Notifications are blocked in this browser, so I’ll show reminders inside the app instead.");tick()}
+  if(any&&webOK()&&Notification.permission==="default")Notification.requestPermission().then(done,done);else done()};
+$("rtest").onclick=function(){var ln=LN(),msg="This is a test reminder. It’s working!";
+  if(ln){ln.requestPermissions().then(function(r){
+      if(r.display!=="granted"){alert("Notifications are off. You can turn them on in your phone’s Settings.");return}
+      return ln.schedule({notifications:[{id:99,title:state.name,body:msg,schedule:{at:new Date(Date.now()+3000)}}]}).then(function(){alert("Test sent. It should arrive in a few seconds.")})})
+    .catch(function(){alert("I couldn’t send the test. Please try again.")});return}
+  if(!webOK()){alert("This browser can’t show notifications.");return}
+  function go(){if(!webNotify(msg))alert("Notifications are blocked in this browser. I’ll show reminders inside the app instead.")}
+  if(Notification.permission==="default")Notification.requestPermission().then(go,go);else go()};
+
+/* ---------- Install to home screen (browser) ---------- */
+var deferred=null,isNative=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
+var standalone=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+var isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+function showInstall(){if(!isNative&&!standalone)$("install").hidden=false}
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();deferred=e;showInstall()});
+window.addEventListener("appinstalled",function(){deferred=null;$("install").hidden=true});
+if(isIOS)showInstall();
+$("install").onclick=function(){
+  if(deferred){deferred.prompt();deferred.userChoice.then(function(){deferred=null;$("install").hidden=true});return}
+  if(isIOS){alert("To install: tap the Share button in Safari, then choose \u201cAdd to Home Screen\u201d.");return}
+  alert("To install: open your browser menu and choose \u201cInstall app\u201d or \u201cAdd to Home screen\u201d.")};
+if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){
+  window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
+
+setKind();renderToday();renderRefl();showTab("today");remLabel();setInterval(tick,30000);document.addEventListener("visibilitychange",function(){if(!document.hidden)tick()});tick();if(!state.seen)openTut();
+})();
+</script>
+</body>
+</html>

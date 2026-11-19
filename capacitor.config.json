@@ -1,0 +1,7 @@
+{
+  "appId": "com.yourname.accountabilitypartner",
+  "appName": "Accountability Partner",
+  "webDir": "www",
+  "ios": { "contentInset": "never" },
+  "android": { "allowMixedContent": false }
+}
